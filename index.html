@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="I followed one sentence through ModernBERT to see if it knows whose opinion it is reading.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Does an AI Know Whose Opinion It Is?">
+    <meta property="og:description" content="I followed one sentence through ModernBERT to see if it knows whose opinion it is reading.">
+    <meta property="og:url" content="https://chimchim89.github.io/Does-an-AI-Know-Whose-Opinion-It-Is-/">
+    <meta property="og:image" content="https://chimchim89.github.io/Does-an-AI-Know-Whose-Opinion-It-Is-/images/cover.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://chimchim89.github.io/Does-an-AI-Know-Whose-Opinion-It-Is-/images/cover.png">
+    <title>Blog | Does an AI Know Whose Opinion It Is?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+        .serif-heading {
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            letter-spacing: -0.02em;
+        }
+        .prose h1, .prose h2, .prose h3 {
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            letter-spacing: -0.02em;
+        }
+        .prose p {
+            color: #4a4a4a;
+            line-height: 1.8;
+        }
+        .prose li {
+            color: #4a4a4a;
+            line-height: 1.8;
+        }
+        .prose a {
+            color: #1a1a1a;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .prose blockquote {
+            border-left: 2px solid #e2e8f0;
+            padding-left: 1.5rem;
+            color: #6b6b6b;
+            font-style: italic;
+        }
+        .prose img, .prose svg, .prose video {
+            max-width: 100%;
+            height: auto;
+        }
+        .formula-box {
+            background: #f8f8f8;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1.25rem 1.5rem;
+            font-family: 'Times New Roman', Times, Georgia, serif;
+        }
+        .prose table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .prose th, .prose td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.6rem 0.5rem;
+            text-align: left;
+            color: #4a4a4a;
+        }
+        .prose th {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+        @media (max-width: 640px) {
+            .serif-heading {
+                font-size: 1.875rem;
+            }
+            h2 {
+                font-size: 1.5rem !important;
+            }
+            h3 {
+                font-size: 1.25rem !important;
+            }
+            .prose p, .prose li {
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-16 sm:pb-20">
+
+        <article>
+            <header class="mb-16 text-center">
+                <div class="mb-6 px-4 py-1 border border-gray-100 bg-gray-50 rounded-full text-[10px] tracking-[0.2em] text-gray-400 uppercase font-semibold inline-block">
+                    Article
+                </div>
+                <h1 class="serif-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-800 leading-tight mb-6">
+                    Does an AI Know Whose Opinion It Is?
+                </h1>
+                <div class="flex items-center justify-center gap-4 text-sm text-gray-400">
+                    <time datetime="2026-11-17">November 17, 2026</time>
+                    <span>·</span>
+                    <span>14 min read</span>
+                </div>
+            </header>
+
+            <div class="prose prose-lg mx-auto">
+
+                <!-- 1 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">1. Introduction</h2>
+                <p class="mb-6">
+                    Read this sentence.
+                </p>
+                <p class="mb-6">
+                    <strong>"Tom is a good person, Mary thinks he is not."</strong>
+                </p>
+                <p class="mb-6">
+                    You probably understood three things without even trying. "He" is Tom. Tom is a good person. And the "not" is only what Mary thinks. The sentence never says Mary is right. It just tells you she disagrees.
+                </p>
+                <p class="mb-6">
+                    My friend DeadMeme sent me this exact sentence with a simple idea. Run it through an AI model, look inside, and watch how the neurons light up for each word. I couldn't stop thinking about it, so I tried it.
+                </p>
+                <p class="mb-6">
+                    The short version is that the model knows who "he" is, every single time. It even works out what "not good" means. But it doesn't keep track of whose opinion that is. When Mary says Tom isn't good, the model's own view of Tom drops almost as much as Mary's.
+                </p>
+                <p class="mb-6">
+                    Let's go through how I got there.
+                </p>
+                <figure class="my-8">
+                    <video controls playsinline preload="metadata" style="width:100%; border:1px solid #e2e8f0; border-radius:0.5rem;">
+                        <source src="images/does_it_know_whose_opinion.mp4" type="video/mp4">
+                    </video>
+                    <figcaption class="text-center text-sm text-gray-400 mt-3">The two big questions in 90 seconds. Every number in it comes from the tests below.</figcaption>
+                </figure>
+
+                <!-- 2 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">2. What We Want to Know</h2>
+                <p class="mb-6">
+                    So I split it into four questions.
+                </p>
+                <ul class="list-disc pl-6 mb-6 space-y-2">
+                    <li><strong>Who is "he"?</strong> Does the model connect "he" to Tom and not to Mary?</li>
+                    <li><strong>Does "good" stick to Tom?</strong> Does the quality land on the right person?</li>
+                    <li><strong>What does "not" do?</strong> Does the word actually change anything inside?</li>
+                    <li><strong>Is the "not" just Mary's opinion?</strong> Or does the model start believing Tom isn't good?</li>
+                </ul>
+
+                <!-- 3 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">3. A Quick Look Inside the Model</h2>
+                <p class="mb-6">
+                    The model I used is ModernBERT. It's not a chatbot. It reads a whole sentence at once, and it was trained on a huge amount of text where some words were hidden and it had to guess them back. So filling in blanks is the one thing it's really good at.
+                </p>
+                <p class="mb-6">
+                    When it reads a sentence, every word gets turned into a list of 768 numbers. You can think of each number as a small dial. When people say neurons "light up," this is basically what they mean. Some dials turn up and some turn down, depending on the word and everything around it.
+                </p>
+                <p class="mb-6">
+                    Then the sentence goes through 22 steps, called <strong>layers</strong>. At every layer, each word's dials get updated based on all the other words in the sentence. So at the start, "he" is just "he." By the end, its dials have been shaped by "Tom," "Mary," "good," and "not." Whatever the model understands about the sentence has to live somewhere in those dials.
+                </p>
+                <p class="mb-6">
+                    I also ran everything on the original BERT from 2018. It mostly behaves the same way, so I'll only bring it up when it doesn't.
+                </p>
+
+                <!-- 4 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">4. How I Tested It</h2>
+                <p class="mb-6">
+                    Staring at dials on their own doesn't tell you much. Thousands of numbers change for every word, and most of those changes mean nothing to us. So I used three kinds of tests.
+                </p>
+                <ul class="list-disc pl-6 mb-6 space-y-2">
+                    <li><strong>Ask it.</strong> Hide a word and see what it guesses. For example, "Tom is good, Mary thinks ___ is not." If it fills in "he," it has worked out who the sentence is about.</li>
+                    <li><strong>Look inside.</strong> Check which dials change, and at which layer. This tells you where the information <em>might</em> be, but not whether the model actually uses it.</li>
+                    <li><strong>The swap test.</strong> This is the one I relied on most. Take two versions of a sentence, for example one with Tom and Mary swapped. Copy one word's dials at one layer from the second version into the first. If the model's answer changes, that word at that layer was carrying the answer. Do this for every word at every layer, and you get a map of where the answer travels inside the model.</li>
+                </ul>
+                <p class="mb-6">
+                    I also stuck to a few rules. I wrote down my guess before every test, so I couldn't fool myself afterwards. I used thousands of sentences, not just one, with different names and different adjectives (kind, rude, smart, selfish, and so on). And every test had a control, a change that shouldn't matter, just to check that the effect was real.
+                </p>
+
+                <!-- 5 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">5. Who Is "He"? It Knows. Every Time.</h2>
+                <p class="mb-6">
+                    Let's start with the good news, because this is the part the model nails.
+                </p>
+                <p class="mb-6">
+                    I asked it to fill in "Tom is good, Mary thinks ___ is not." It said "he" in 100% of the sentences. When I swapped the roles to "Mary is good, Tom thinks ___ is not," it switched to "she." I also added someone who has nothing to do with the story, like "..., says Paul" versus "..., says Kate," and the answer barely moved. So it isn't just reacting to whatever names happen to be nearby.
+                </p>
+                <p class="mb-6">
+                    There was one more shortcut it could be using. In all those sentences, Tom came first. Maybe it just picks the first person it sees. So I flipped it to "Mary met Tom. Tom is good, but Mary thinks ___ is not." Now Mary is both the first name and the closest name to the blank. A lazy model would say "she." ModernBERT still said "he," 100% of the time. It really is working out who the sentence is about.
+                </p>
+                <p class="mb-6">
+                    Now for where it happens. The swap test showed that the answer sits on the word "Tom" for 20 of the 22 layers. Then, in the last two, it jumps across to the blank. The model doesn't work it out slowly, word by word. It holds the answer on the name and only pulls it over at the very end.
+                </p>
+                <figure class="my-8">
+                    <img src="images/who_flow.png" alt="Line chart: the word Tom carries the answer for 20 layers, then the blank takes it in the last two layers">
+                    <figcaption class="text-center text-sm text-gray-400 mt-3">Where "who is he" lives inside ModernBERT. On "Tom" for most of the way, then on the blank right at the end.</figcaption>
+                </figure>
+                <p class="mb-6">
+                    It's also done by a small number of parts. Each layer has 12 <strong>attention heads</strong>, which are small units that decide which other words each word should look at. Two of them, in layers 20 and 21, do more than half of the work between them. That's right where the chart above shows the answer moving across to the blank.
+                </p>
+                <p class="mb-6">
+                    The fun part is that my friend had run his own experiments on a completely different text, a passage from a novel, and found the same thing. Pronouns get connected to people in the late layers, roughly 15 to 21. BERT does the same thing too, just earlier, since it only has 12 layers.
+                </p>
+
+                <!-- 6 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">6. The Number That Almost Fooled Me</h2>
+                <p class="mb-6">
+                    Getting to that result wasn't smooth, though.
+                </p>
+                <p class="mb-6">
+                    My very first look was promising. Inside the model, "he" started looking more like "Tom" than "Mary." But then I realized that doesn't prove much. "Tom" and "he" are both male. The model could just be matching a male word to a male name, without understanding anything.
+                </p>
+                <p class="mb-6">
+                    So I tried sentences with two men instead, like "Tom is a good person, John thinks he is not." Now gender can't help. And that's where ModernBERT looked hopeless. In its later layers, every word looked exactly the same as every other word. The results were completely flat.
+                </p>
+                <p class="mb-6">
+                    It took me a while to figure out why. One single dial, number 251, was taking up 97% of all the activity in those layers. It was so loud that it drowned out the other 767. Every word looked identical because every word was basically just "dial 251."
+                </p>
+                <figure class="my-8">
+                    <img src="images/dial_251_share.png" alt="Bar chart: in layers 16 to 21, a single dial holds 97 percent of all activity">
+                    <figcaption class="text-center text-sm text-gray-400 mt-3">How much of each layer's activity comes from one dial. A fair share would be about 0.13%. In layers 16 to 21, it's 97%.</figcaption>
+                </figure>
+                <p class="mb-6">
+                    Once I adjusted for it, the signal showed up right where it should be. The model did connect "he" to Tom, even with two men, in exactly the layers that had looked flat.
+                </p>
+                <p class="mb-6">
+                    The lesson I took from this is to never trust a picture of neurons lighting up before checking that one of them isn't drowning out the rest. I'll come back to dial 251 later, because my friend had a question about it.
+                </p>
+
+                <!-- 7 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">7. Does "Good" Stick to Tom? Not Really.</h2>
+                <p class="mb-6">
+                    My first test here looked fine. I gave the model "Tom is good" and asked "Tom is ___," and it leaned toward "good." Then I noticed the problem with my own test. The word "good" was right there in the sentence, and the word "bad" never was. The model could just repeat a word it had seen, without connecting it to anyone.
+                </p>
+                <p class="mb-6">
+                    So I made it fair and put both words in, like "Tom is good, but Mary is bad. In short, Tom is ___." Now repeating a word doesn't help, because both words are there. To get it right, the model has to know which quality belongs to which person.
+                </p>
+                <p class="mb-6">
+                    It mostly didn't. Instead, it picked whichever adjective came last. When the last adjective happened to be the right answer, ModernBERT got it right about 85% of the time. When it wasn't, only about 36%. For "Tom is good, but Mary is bad. In short, Tom is ___," it said "good" only 44% of the time, which is worse than a coin flip.
+                </p>
+                <figure class="my-8">
+                    <img src="images/last_adjective.png" alt="Bar chart: 85 percent correct when the last adjective is the right answer, 36 percent when it is not">
+                    <figcaption class="text-center text-sm text-gray-400 mt-3">Whether the model gets it right depends mostly on which adjective came last, not on who it belongs to.</figcaption>
+                </figure>
+                <p class="mb-6">
+                    What happens inside is more interesting. You can check what the model would answer if it stopped at each layer. In the middle layers, it actually leans slightly toward the right answer, around 55 to 61%. Then the last few layers push hard toward the last adjective and overrule it.
+                </p>
+                <p class="mb-6">
+                    The swap test showed the same thing from another angle. Both adjectives pull the answer toward themselves, like a tug of war, and Mary's adjective, the one that came last, wins. BERT is even worse here. It's basically a "repeat the last word" machine.
+                </p>
+
+                <!-- 8 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">8. What Does "Not" Actually Do?</h2>
+                <p class="mb-6">
+                    To see what "not" does on its own, I compared two sentences that are identical except for one word.
+                </p>
+                <ul class="list-disc pl-6 mb-6 space-y-2">
+                    <li>"Mary thinks he is <strong>not</strong>." (she disagrees)</li>
+                    <li>"Mary thinks he is <strong>too</strong>." (she agrees)</li>
+                </ul>
+                <p class="mb-6">
+                    "Not" has a real effect. It clearly pushes the model's answers toward "bad," so the model isn't ignoring the word.
+                </p>
+                <p class="mb-6">
+                    The swap test showed its path too. The information sits on the word "not" for most of the model, some of it passes through "good" along the way, and it reaches the answer in the late layers. "Tom" and "Mary" carry none of it.
+                </p>
+                <p class="mb-6">
+                    I also looked for a single dial that means "not." There isn't one among the 768. The effect is spread thinly across lots of them. So the model does notice "not." What I wanted to know next is who it thinks the "not" belongs to.
+                </p>
+
+                <!-- 9 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">9. Does It Know It's Only Mary's Opinion? No.</h2>
+                <p class="mb-6">
+                    This is the question I cared about most.
+                </p>
+                <p class="mb-6">
+                    I gave the model the original sentence and asked it two different things.
+                </p>
+                <ul class="list-disc pl-6 mb-6 space-y-2">
+                    <li><strong>"Tom is a ___ person."</strong> The right answer is still "good." Mary's opinion doesn't change the facts.</li>
+                    <li><strong>"Mary thinks Tom is a ___ person."</strong> Here the right answer flips to "bad," because that's what Mary thinks.</li>
+                </ul>
+                <p class="mb-6">
+                    A model that understood whose opinion it was would treat these two very differently. The "not" should hit the second question hard, and leave the first one alone.
+                </p>
+                <p class="mb-6">
+                    That's not what happened. The "not" pushed the answer about Tom himself 77% as hard as it pushed Mary's opinion. The model still leans slightly toward "good" for Tom, but only just. Mary's opinion drags the facts about Tom down almost as much as it drags down what she thinks. BERT does the same, at 86%.
+                </p>
+                <figure class="my-8">
+                    <img src="images/marys_opinion.png" alt="Bar chart: the fact about Tom gets pushed toward bad 77 percent as hard as Mary's opinion">
+                    <figcaption class="text-center text-sm text-gray-400 mt-3">The first bar should be close to zero. It's 77%.</figcaption>
+                </figure>
+                <p class="mb-6">
+                    At this point you might be wondering whether it just doesn't understand "not good" at all. Fair question. So I trained simple detectors on the model's dials, to see whether the combined meaning "Mary thinks not good" can be read from inside. It can, 100% of the time. As a control, I trained the same kind of detector on a nonsense combination of features, and at the same spot in the sentence it only got to 65%.
+                </p>
+                <figure class="my-8">
+                    <img src="images/detectors.png" alt="Bar chart: detectors read not good 100 percent of the time, versus 65 percent for a nonsense control">
+                    <figcaption class="text-center text-sm text-gray-400 mt-3">The meaning "not good" is clearly there inside the model.</figcaption>
+                </figure>
+                <p class="mb-6">
+                    Here's what this chart means. A detector is a very simple program that looks at the model's dials and tries to answer one yes-or-no question. I showed it the dials for thousands of versions of our sentence, some with "not" and some with "too," some with good adjectives and some with bad ones. Its job was to answer whether Mary thinks Tom is good or not good.
+                </p>
+                <p class="mb-6">
+                    That answer depends on two things at once, the adjective and the "not," so the detector can only get it right if the model has combined them somewhere in its dials. To make it fair, I tested it on adjectives it had never seen during training. It got the answer right 100% of the time. That's the dark bar.
+                </p>
+                <p class="mb-6">
+                    The light bar is the control. I gave the same kind of detector a made-up question that also mixes two things together, but one the model has no reason to care about. Read from the same spot, it only managed 65%, much closer to the 50% you'd get by guessing (the dotted line) than to 100%. So the 100% isn't just the detector being clever. The model really does build the meaning "not good" on its own.
+                </p>
+                <p class="mb-6">
+                    So the model clearly works out what "not good" means. It just doesn't attach it to Mary.
+                </p>
+                <p class="mb-6">
+                    One thing to keep in mind is that the detector can't tell the difference between "Mary's opinion is not good" and "these words say not good." So what I can say is that the model builds the meaning. I didn't find anything that keeps track of whose opinion it is.
+                </p>
+                <p class="mb-6">
+                    There's one small bright spot, though. I gave it two people who disagree, one who "knows" and one who only "thinks," like "Mary thinks Tom is bad, but Kate knows he is good." ModernBERT sided with the one who "knows" about 67% of the time, where pure guessing would give 50%. So it has a faint sense that thinking something is weaker than knowing it. BERT doesn't have even that.
+                </p>
+
+                <!-- 10 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">10. "Who" and "What" Use Different Parts</h2>
+                <p class="mb-6">
+                    The swap tests turned up one more thing. The attention heads that carry "who is he" into the answer, and the heads that carry "good or bad," are completely different. Of the top five for each, none overlap, in either model.
+                </p>
+                <figure class="my-8">
+                    <svg viewBox="0 0 760 240" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; font-family: 'Times New Roman', Times, Georgia, serif;">
+                        <rect x="0" y="0" width="760" height="240" fill="#fdfdfd" stroke="#e2e8f0"/>
+                        <rect x="40" y="40" width="250" height="140" rx="10" fill="#ffffff" stroke="#2563eb"/>
+                        <text x="165" y="70" font-size="16" fill="#2563eb" text-anchor="middle">heads that carry "who"</text>
+                        <text x="165" y="105" font-size="15" fill="#4a4a4a" text-anchor="middle">layer 21, head 1</text>
+                        <text x="165" y="130" font-size="15" fill="#4a4a4a" text-anchor="middle">layer 20, head 10</text>
+                        <text x="165" y="155" font-size="15" fill="#4a4a4a" text-anchor="middle">layer 22, head 7 ...</text>
+                        <rect x="470" y="40" width="250" height="140" rx="10" fill="#ffffff" stroke="#16a34a"/>
+                        <text x="595" y="70" font-size="16" fill="#16a34a" text-anchor="middle">heads that carry "good or bad"</text>
+                        <text x="595" y="105" font-size="15" fill="#4a4a4a" text-anchor="middle">layer 22, head 10</text>
+                        <text x="595" y="130" font-size="15" fill="#4a4a4a" text-anchor="middle">layer 22, head 2</text>
+                        <text x="595" y="155" font-size="15" fill="#4a4a4a" text-anchor="middle">layer 22, head 11 ...</text>
+                        <line x1="290" y1="110" x2="470" y2="110" stroke="#cbd5e1" stroke-dasharray="5,5"/>
+                        <text x="380" y="100" font-size="14" fill="#6b6b6b" text-anchor="middle">no overlap</text>
+                        <text x="380" y="215" font-size="14" fill="#6b6b6b" text-anchor="middle">they only meet at the answer</text>
+                    </svg>
+                    <figcaption class="text-center text-sm text-gray-400 mt-3">ModernBERT's top heads for each job. Same late layers, different parts.</figcaption>
+                </figure>
+                <p class="mb-6">
+                    So the model handles "who" and "what" side by side, with separate parts, in the same late layers. They only meet at the very end, when it gives its answer. That matches everything else in this post. It's very good at keeping track of people, and much weaker at keeping track of what's true about them and who said it.
+                </p>
+
+                <!-- 11 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">11. So What Is Dial 251?</h2>
+                <p class="mb-6">
+                    Remember the dial that broke everything early on? It turned out it had broken my friend's measurements too, in the exact same layers. He asked if I could study it on its own, using a method from Nick Cammarata's essay <em>Neural Networks Are Already Clean</em>.
+                </p>
+                <p class="mb-6">
+                    The idea behind the method is pretty simple. Run a lot of normal text through the model. Write down when a neuron fires the most and when it fires the least, because every neuron has two sides. Look at what those moments have in common and give it a name. Then switch it off and check that the right thing breaks.
+                </p>
+                <p class="mb-6">
+                    So I ran 400 paragraphs of Wikipedia through it.
+                </p>
+                <p class="mb-6">
+                    Dial 251's biggest moments are almost all on the word <strong>"the"</strong>, plus the hidden marker at the end of every piece of text. On those, it goes below −45,000, when it normally sits around −200. Its other side, where it's smallest, is full stops and commas. That's it. It's not about people, or goodness, or anything at all. It reacts to the most boring parts of language.
+                </p>
+                <p class="mb-6">
+                    Then I switched it off, and the model fell apart.
+                </p>
+                <table class="mb-6">
+                    <thead>
+                        <tr><th>What I switched off</th><th>Fill-in-the-blank error</th><th>"Who is he" score</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Nothing</td><td>1.67</td><td>100%</td></tr>
+                        <tr><td>Dial 251</td><td>9.27 (close to random guessing)</td><td>50% (a coin flip)</td></tr>
+                        <tr><td>A random dial</td><td>no change</td><td>100%</td></tr>
+                    </tbody>
+                </table>
+                <p class="mb-6">
+                    Switching off dial 251 only on "the" and the end-of-text markers, or only everywhere else, still broke the model badly. So dial 251 doesn't mean anything on its own, but the model can't work without it.
+                </p>
+                <p class="mb-6">
+                    Here's the catch, though. Cammarata's essay is about a different kind of neuron, the ones inside each layer's small processing block, not the 768 dials that get passed between layers. So I ran the same method on those too, picking the ones that react most to our sentence. Some of them were surprisingly clean.
+                </p>
+                <ul class="list-disc pl-6 mb-6 space-y-2">
+                    <li><strong>A negation neuron.</strong> One side fires on "not," "rejected," "against," and "don't." The other side fires on "never," "lacking," and "removed."</li>
+                    <li><strong>Praise neurons.</strong> They fire on words like "positive," "success," "perfect," and "award."</li>
+                    <li><strong>A stories neuron.</strong> It fires on "novel," "character," "plot," and "role."</li>
+                </ul>
+                <p class="mb-6">
+                    About half of the nine I checked were this easy to read. The rest were a mess.
+                </p>
+                <p class="mb-6">
+                    My favourite bit was this. Of the three neurons that best separate "Mary thinks he's good" from "Mary thinks he's not good," two are exactly the negation neuron and one of the praise neurons. The third is a mix. None of them is about Mary. The model handles "not good" with general-purpose parts, and nothing in there seems to say "this belongs to Mary." It's the same thing I found in the rest of this post, just at the level of single neurons.
+                </p>
+
+                <!-- 12 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">12. Where I Was Wrong</h2>
+                <p class="mb-6">
+                    Since I wrote my guesses down before every test, I can tell you exactly where I got it wrong.
+                </p>
+                <ul class="list-disc pl-6 mb-6 space-y-2">
+                    <li>I expected ModernBERT to connect "good" to Tom most of the time. On the hard version, it got 44%.</li>
+                    <li>I expected the "not good" signal inside to be weak. It was readable 100% of the time.</li>
+                    <li>I expected no single attention head to do more than about a third of the "who is he" work. One head in BERT does 44%.</li>
+                    <li>And early on, I thought ModernBERT understood nothing about pronouns. That was dial 251 fooling me.</li>
+                </ul>
+                <p class="mb-6">
+                    I only know all this because I wrote my guesses down before each test. Otherwise I'd probably have convinced myself I expected these results all along.
+                </p>
+
+                <!-- 13 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">13. A Few Limits</h2>
+                <p class="mb-6">
+                    These are fill-in-the-blank models, not chatbots, so the AI you talk to every day might behave differently. I used one family of sentences, with many names and adjectives, but only ones the model reads as a single word. Some of my phrasing, like "In short," may have nudged it toward the end of the sentence. And some of the later tests ran on my laptop, with smaller samples than I'd like.
+                </p>
+
+                <!-- 14 -->
+                <h2 class="text-2xl sm:text-3xl text-gray-800 mt-10 sm:mt-12 mb-4 sm:mb-6">14. Conclusion</h2>
+                <p class="mb-6">
+                    The model is really good at <strong>who</strong>. It knows who "he" is, every single time, and it holds onto that until the very end.
+                </p>
+                <p class="mb-6">
+                    It understands <strong>"not good."</strong> The meaning is clearly there inside it.
+                </p>
+                <p class="mb-6">
+                    But it doesn't keep track of <strong>whose opinion</strong> that is. When Mary says Tom isn't good, the model's own view of Tom drops almost as much as hers.
+                </p>
+                <p class="mb-6">
+                    So it gets the meaning of the sentence, but it loses track of who said what.
+                </p>
+
+            </div>
+
+        </article>
+
+    </main>
+
+    <footer class="py-12 text-center text-sm text-gray-400">
+        <p>Written with love by Achal.</p>
+        <p>I'm open to technical writing internships/gigs. You can reach out to me <a href="https://www.linkedin.com/in/achal-titare/" target="_blank" style="color: #0A66C2;">
+    LinkedIn
+</a> and <a href="https://x.com/achalllll" target="_blank" style="color: #0A66C2;">
+    Twitter
+</a>.</p>
+    </footer>
+
+</body>
+</html>
